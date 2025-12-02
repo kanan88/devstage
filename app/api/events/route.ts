@@ -7,19 +7,7 @@ export async function POST(request: NextRequest) {
     await connectToDatabase()
     const formData = await request.formData()
 
-    let event
-
-    try {
-      event = Object.fromEntries(formData.entries())
-    } catch (e) {
-      return NextResponse.json(
-        {
-          message: 'Invalid JSON data format',
-          error: e instanceof Error ? e.message : 'Unknown error'
-        },
-        { status: 400 }
-      )
-    }
+    const event = Object.fromEntries(formData.entries())
 
     const createdEvent = await Event.create(event)
 
@@ -28,6 +16,12 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     )
   } catch (e) {
+    if (e instanceof Error && e.name === 'ValidationError') {
+      return NextResponse.json(
+        { message: 'Invalid form data', error: e.message },
+        { status: 400 }
+      )
+    }
     return NextResponse.json(
       {
         message: 'Failed to create event',
