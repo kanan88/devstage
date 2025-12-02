@@ -40,9 +40,9 @@ const BookingSchema = new Schema(
 
 BookingSchema.index({ eventId: 1 })
 
-export type Booking = InferSchemaType<typeof BookingSchema>
-export type BookingDocument = HydratedDocument<Booking>
-export type BookingModel = Model<Booking>
+export type BookingAttributes = InferSchemaType<typeof BookingSchema>
+export type BookingDocument = HydratedDocument<BookingAttributes>
+export type BookingModel = Model<BookingAttributes>
 
 /**
  * Pre-save hook ensures referenced events exist before persisting a booking.
@@ -60,4 +60,4 @@ BookingSchema.pre<BookingDocument>('save', async function preSave() {
 
 export const Booking =
   (mongoose.models.Booking as BookingModel) ||
-  mongoose.model<Booking>('Booking', BookingSchema)
+  mongoose.model<BookingAttributes>('Booking', BookingSchema)

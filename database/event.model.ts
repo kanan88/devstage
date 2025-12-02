@@ -72,8 +72,8 @@ const EventSchema = new Schema(
   }
 )
 
-export type Event = InferSchemaType<typeof EventSchema>
-export type EventDocument = HydratedDocument<Event>
+export type EventAttributes = InferSchemaType<typeof EventSchema>
+export type EventDocument = HydratedDocument<EventAttributes>
 
 const slugify = (value: string): string =>
   value
@@ -129,8 +129,8 @@ EventSchema.pre<EventDocument>('save', function preSave() {
 
 EventSchema.index({ slug: 1 }, { unique: true })
 
-export type EventModel = Model<Event>
+export type EventModel = Model<EventAttributes>
 
 export const Event =
   (mongoose.models.Event as EventModel) ||
-  mongoose.model<Event>('Event', EventSchema)
+  mongoose.model<EventAttributes>('Event', EventSchema)
