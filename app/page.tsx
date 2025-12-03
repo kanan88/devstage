@@ -1,8 +1,14 @@
 import EventCard from '@/components/EventCard'
 import ExploreBtn from '@/components/ExploreBtn'
-import { events } from '@/lib/constants'
+import { EventAttributes } from '@/database'
+import { slugify } from '@/database/event.model'
 
-const HomePage = () => {
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
+
+const HomePage = async () => {
+  const response = await fetch(`${BASE_URL}/api/events`)
+  const { events } = await response.json()
+
   return (
     <section>
       <h1 className="text-center">
@@ -19,11 +25,24 @@ const HomePage = () => {
         <h3>Featured Events</h3>
 
         <ul className="events">
-          {events.map(event => (
-            <li key={event.slug} className="list-none">
-              <EventCard {...event} />
-            </li>
-          ))}
+          {events &&
+            events.length > 0 &&
+            events.map((event: EventAttributes) => {
+              const slug = slugify(event.title)
+
+              return (
+                <li key={slug} className="list-none">
+                  <EventCard
+                    title={event.title}
+                    image={event.image}
+                    slug={slug}
+                    location={event.location}
+                    date={event.date}
+                    time={event.time}
+                  />
+                </li>
+              )
+            })}
         </ul>
       </div>
     </section>

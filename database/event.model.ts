@@ -75,7 +75,7 @@ const EventSchema = new Schema(
 export type EventAttributes = InferSchemaType<typeof EventSchema>
 export type EventDocument = HydratedDocument<EventAttributes>
 
-const slugify = (value: string): string =>
+export const slugify = (value: string): string =>
   value
     .trim()
     .toLowerCase()
@@ -126,8 +126,6 @@ EventSchema.pre<EventDocument>('save', function preSave() {
   this.date = toIsoDate(this.date)
   this.time = normalizeTime(this.time)
 })
-
-EventSchema.index({ slug: 1 }, { unique: true })
 
 export type EventModel = Model<EventAttributes>
 
