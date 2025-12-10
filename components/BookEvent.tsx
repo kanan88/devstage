@@ -33,4 +33,5 @@ const BookEvent = ({ eventId, slug }: { eventId: string; slug: string }) => {
     </div>
   )
 }
+
 export default BookEvent
