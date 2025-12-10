@@ -19,8 +19,35 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const tags = JSON.parse(formData.get('tags') as string)
-    const agenda = JSON.parse(formData.get('agenda') as string)
+    const tagsRaw = formData.get('tags')
+    const agendaRaw = formData.get('agenda')
+
+    if (typeof tagsRaw !== 'string' || typeof agendaRaw !== 'string') {
+      return NextResponse.json(
+        { message: 'Tags and agenda are required' },
+        { status: 400 }
+      )
+    }
+
+    let tags: unknown
+    let agenda: unknown
+
+    try {
+      tags = JSON.parse(tagsRaw)
+      agenda = JSON.parse(agendaRaw)
+    } catch {
+      return NextResponse.json(
+        { message: 'Tags and agenda must be valid JSON arrays' },
+        { status: 400 }
+      )
+    }
+
+    if (!Array.isArray(tags) || !Array.isArray(agenda)) {
+      return NextResponse.json(
+        { message: 'Tags and agenda must be arrays' },
+        { status: 400 }
+      )
+    }
 
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
