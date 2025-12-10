@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 
 import BookEvent from '@/components/BookEvent'
 import EventCard from '@/components/EventCard'
-import { getSimilarEventsBySlag } from '@/lib/actions/event.actions'
+import { getSimilarEventsBySlug } from '@/lib/actions/event.actions'
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
@@ -78,7 +78,7 @@ const EventDetailsPage = async ({
 
   const bookings = 10
 
-  const similarEvents = await getSimilarEventsBySlag(slug)
+  const similarEvents = await getSimilarEventsBySlug(slug)
 
   return (
     <section id="event">
